@@ -137,7 +137,7 @@ class __HeaderState extends State<_Header> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    const gap = 5.0;
+    const gap = 35.0;
     final logoHeight = min(widget.height - _titleHeight - gap, kMaxLogoHeight);
     final displayLogo = widget.logoPath != null && logoHeight >= kMinLogoHeight;
 
@@ -208,6 +208,9 @@ class FlutterLogin extends StatefulWidget {
     @required this.onSignup,
     @required this.onLogin,
     @required this.onRecoverPassword,
+    // hm
+    this.defaultUserId,
+    this.defaultUserPassword,
     this.title = 'LOGIN',
     this.logo,
     this.messages,
@@ -253,6 +256,9 @@ class FlutterLogin extends StatefulWidget {
   /// Same as [emailValidator] but for password
   final FormFieldValidator<String> passwordValidator;
 
+  // hm
+  final String defaultUserId;
+  final String defaultUserPassword;
   /// Called after the submit animation's completed. Put your route transition
   /// logic here. Recommend to use with [logoTag] and [titleTag]
   final Function onSubmitAnimationCompleted;
@@ -547,6 +553,9 @@ class _FlutterLoginState extends State<FlutterLogin>
         widget.emailValidator ?? FlutterLogin.defaultEmailValidator;
     final passwordValidator =
         widget.passwordValidator ?? FlutterLogin.defaultPasswordValidator;
+    // hm
+    final defaultUserId = widget.defaultUserId;
+    final defaultUserPassword = widget.defaultUserPassword;
 
     return MultiProvider(
       providers: [
@@ -558,6 +567,9 @@ class _FlutterLoginState extends State<FlutterLogin>
             onLogin: widget.onLogin,
             onSignup: widget.onSignup,
             onRecoverPassword: widget.onRecoverPassword,
+            // hm
+            email: defaultUserId,
+            password: defaultUserPassword,
           ),
         ),
       ],
