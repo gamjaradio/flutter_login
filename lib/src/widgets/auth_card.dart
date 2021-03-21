@@ -685,7 +685,14 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
             width: cardWidth,
             child: Column(
               children: <Widget>[
-                !widget.hideForgotPasswordButton
+                // hm
+              SizedBox(height: 20),
+                 messages.forgotPasswordButton.isNotEmpty ?
+                 _buildForgotPassword(theme, messages) : Container(),
+                _buildSubmitButton(theme, messages, auth),
+                messages.signupButton.isNotEmpty?
+                 _buildSwitchAuthButton(theme, messages, auth) : Container(),
+                /* !widget.hideForgotPasswordButton
                     ? _buildForgotPassword(theme, messages)
                     : SizedBox.fromSize(
                         size: Size.fromHeight(16),
@@ -695,7 +702,7 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
                     ? _buildSwitchAuthButton(theme, messages, auth)
                     : SizedBox.fromSize(
                         size: Size.fromHeight(10),
-                      ),
+                      ), */
               ],
             ),
           ),
