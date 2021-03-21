@@ -1,7 +1,6 @@
 # modified
-defaultUserId
-defaultUserPassword
-property added
+defaultUserId, defaultUserPassword property added
+forgot password button, signup button removed
 # Flutter Login
 
 `FlutterLogin` is a ready-made login/signup widget with many animation effects to
