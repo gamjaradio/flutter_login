@@ -1,3 +1,7 @@
+# modified
+defaultUserId
+defaultUserPassword
+property added
 # Flutter Login
 
 `FlutterLogin` is a ready-made login/signup widget with many animation effects to
