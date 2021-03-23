@@ -79,6 +79,7 @@ class _Header extends StatefulWidget {
   });
 
   final String logoPath;
+
   final String logoTag;
   final String title;
   final String titleTag;
@@ -137,7 +138,7 @@ class __HeaderState extends State<_Header> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    const gap = 35.0;
+    const gap = 25.0;
     final logoHeight = min(widget.height - _titleHeight - gap, kMaxLogoHeight);
     final displayLogo = widget.logoPath != null && logoHeight >= kMinLogoHeight;
 
@@ -179,6 +180,7 @@ class __HeaderState extends State<_Header> {
 
     return SizedBox(
       height: widget.height,
+      width: 220, // hm 이거 로고 사이즈 바뀌면 조정해야됨.
       child: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[
@@ -213,6 +215,8 @@ class FlutterLogin extends StatefulWidget {
     this.defaultUserPassword,
     this.title = 'LOGIN',
     this.logo,
+    // hm
+    this.logoBottom,
     this.messages,
     this.theme,
     this.emailValidator,
@@ -239,6 +243,8 @@ class FlutterLogin extends StatefulWidget {
 
   /// The path to the asset image that will be passed to the `Image.asset()`
   final String logo;
+  // hm
+  final String logoBottom;
 
   /// Describes all of the labels, text hints, button texts and other auth
   /// descriptions
@@ -259,6 +265,7 @@ class FlutterLogin extends StatefulWidget {
   // hm
   final String defaultUserId;
   final String defaultUserPassword;
+
   /// Called after the submit animation's completed. Put your route transition
   /// logic here. Recommend to use with [logoTag] and [titleTag]
   final Function onSubmitAnimationCompleted;
@@ -307,6 +314,8 @@ class _FlutterLoginState extends State<FlutterLogin>
   static const loadingDuration = Duration(milliseconds: 400);
   AnimationController _loadingController;
   AnimationController _logoController;
+  AnimationController _logoBottomController;
+
   AnimationController _titleController;
   double _selectTimeDilation = 1.0;
 
@@ -320,14 +329,21 @@ class _FlutterLoginState extends State<FlutterLogin>
     )..addStatusListener((status) {
         if (status == AnimationStatus.forward) {
           _logoController.forward();
+          _logoBottomController.forward();
           _titleController.forward();
+
         }
         if (status == AnimationStatus.reverse) {
           _logoController.reverse();
+          _logoBottomController.reverse();
           _titleController.reverse();
         }
       });
     _logoController = AnimationController(
+      vsync: this,
+      duration: loadingDuration,
+    );
+    _logoBottomController = AnimationController(
       vsync: this,
       duration: loadingDuration,
     );
@@ -345,6 +361,7 @@ class _FlutterLoginState extends State<FlutterLogin>
   void dispose() {
     _loadingController.dispose();
     _logoController.dispose();
+    _logoBottomController.dispose();
     _titleController.dispose();
     super.dispose();
   }
@@ -364,6 +381,7 @@ class _FlutterLoginState extends State<FlutterLogin>
       titleController: _titleController,
       height: height,
       logoPath: widget.logo,
+
       logoTag: widget.logoTag,
       title: widget.title,
       titleTag: widget.titleTag,
@@ -557,6 +575,12 @@ class _FlutterLoginState extends State<FlutterLogin>
     final defaultUserId = widget.defaultUserId;
     final defaultUserPassword = widget.defaultUserPassword;
 
+    var logoBottom = Image.asset(
+      widget.logoBottom,
+      filterQuality: FilterQuality.high,
+      height: 60,
+    );
+
     return MultiProvider(
       providers: [
         ChangeNotifierProvider.value(
@@ -608,6 +632,15 @@ class _FlutterLoginState extends State<FlutterLogin>
                     Positioned(
                       top: cardTopPosition - headerHeight - headerMargin,
                       child: _buildHeader(headerHeight, loginTheme),
+                    ),
+                    Positioned(
+                      bottom: 30,
+                      child: FadeIn(
+                        controller: _logoBottomController,
+                        offset: .25,
+                        fadeDirection: FadeDirection.bottomToTop,
+                        child: logoBottom,
+                      ),
                     ),
                   ],
                 ),
